@@ -102,3 +102,59 @@ x <- list(a = 1, b = 2, c = 3)
 m <- matrix(1:4, nrow = 2, ncol = 2) 
 dimnames(m) <- list(c("a", "b"), c("c", "d")) 
 # Note that the first vector in the list is attributed to row and the second to the columns. 
+
+# Use read.table, read.csv, readLines, source, dget, load, unserialize for reading data into R  
+
+# use write.table, writeLine, dump, dput, save, serialize for writing data in R 
+
+# read.table has the following args: 
+# file - name of file / connection 
+# head - logical denoting if file contains header 
+# sep - string denoting seperator / delimiter 
+# colClasses - Character vector indicating class of each column 
+# nrows - denotes number of rows in dataset 
+# comment.char - character string indicating comment character 
+# skip - number of lines to skip from beginning 
+# stringsAsFactors - specify if strings should be considered as factors 
+
+# read.table is the easiest way of reading a file. This will automatically skip lines beginning with # 
+# Figure out the number of rows 
+# Figure out class of the column, though highlighting these options at the start will make the process efficient 
+# read.csv is similar except that the delimiter is a comma. 
+data <- read.table("foo.txt") 
+
+# Make sure that the size of the RAM is more than the size of the dataset. Else, you will not be able to process the file. 
+# Specifying colClasses runs the read.table much faster. We can set colClasses = numeric if all columns are numeric. 
+# The following code helps us easily identify classes: 
+initial <- read.table("datatable.txt", nrows = 100) 
+classes <- sapply(initial, class) # looping through all columns and using class function to get class. 
+tabAll <- read.table("datatable.txt", colClasses = classes) 
+
+# nrows helps with how much memory is used to process the data. 
+
+# Calculating Memory: Imagine 1.5M rows and 120 columns of numeric data 
+# 1.5M * 120 * 8 bytes / numeric  = 1440000000 bytes = 1440000000 / 2^20 bytes/MB = 1373.29 MB = 1.34 GB 
+
+# Textual Formats: 
+# Files can also be stored as text format. 
+# dumping and dputing have textual format that is editable and recoverabe in case of curroptin 
+# dput and dump stores metadata so that another user does not have to specify it 
+# Textual formats work better with version control programs like git which can only track changes in text files 
+# Corruption in text files have easier fixes. 
+# Textual formats adhere to "Unix philosophy" 
+# Textual formats are not space efficient 
+
+y <- data.frame (a = 1, b = "string") # data frame ccreated. 
+dput(y) # Gives the meta data and data of y data frame. 
+dput(y, file = "y.R") # Writes y and its meta data into a R file 
+new.y <- dget("y.R") # dget gets the file content (dataframe) and pushes it into a variable 
+
+# new.y will have the information such as class, colnames, etc. passed into it.
+
+# dget can be used only on one object but dump can be used on multiple objects 
+x <- "foo" 
+y <- data.frame (s = 1, b = "a") 
+dump(c("x", "y"), file = "data.R") # values of x and y are pushed into data.R file
+rm(x, y) # removing x & y from R environment 
+source("data.R") # Brings back x & y to R environment 
+

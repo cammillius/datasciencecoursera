@@ -191,5 +191,74 @@ u <- x > "a"
 x <- list(foo = 1:4, bar = 0.6) 
 x[1] # Will get a list back - same as parent object 
 x[[1]] # Just contains sequence of values 
+x$bar
+x[["bar"]]
+x["bar"]
 
+x <- list(foo = 1:4, bar = 0.6, baz = "hello") 
+x[c(1,3)]
 
+# The "[[" operator can be used with computed indices and variables while $ cannot. 
+x <- list(foo = 1:4, bar = 0.6, baz = "hello") 
+name <- "foo" 
+x[[name]] # Substitutes name with "foo"
+x$name # tries to find an element with name as name and has no resultant value 
+
+# "[[" can take an integer sequence. 
+x <- list(a = list(10, 12, 14), b = c(3.14, 2.81)) 
+x[[c(1,3)]]
+x[[1]][[3]]
+x[[c(2,1)]]
+
+# Subsetting Matrices 
+x <- matrix(1:6, 2, 3) 
+x[1,2]
+x[2,1]
+
+# Entire rows / columns can be subset 
+x[1,] # Give entirety of 1st row  
+x[,2] # Give entirety of 2nd column 
+
+# When a single element of matrix is subset, it returns a vector of length 1. 
+# To keep the result a matrix, use drop = FALSE 
+x <- matrix(1:6, 2, 3) 
+x[1,2] # Get an element as vector 
+x[1,] # Get a row as vector 
+x[1,2, drop = FALSE] # Get a single element matrix 
+x[1, , drop = FALSE] # Get a row as matrix 
+
+# Subsetting with names 
+# We can match an element with a partial match of its name using [[ or $ 
+x <- list(aardvark = 1:5) 
+x$a # Gets the element whose name partially matches 
+x[["a"]] # Does not return results as the default is set to exact match 
+x[["a", exact = FALSE]] # The arg allows for partial match 
+
+# Removing NA Values in vectors, lists, dataframes, etc. 
+x <- c(1, 2, NA, 4, NA, 5) 
+bad <- is.na(x) # Create a logical vector where the values match NA 
+x[!bad] # Returns values which do not match bad, which are not NA 
+
+# If you have 2 vectors where the NA values are placed at same positions 
+x <- c(1, 2, NA, 4, NA, 5) 
+y <- c("a", "b", NA, "d", NA, "f") 
+# Note that the NAs are at the same positions in the above 2 matrices 
+good <- complete.cases(x, y) # Identifies which positions in the vectors are not NA 
+x[good] # Returns non-NA values in x 
+y[good] # Returns non-NA values in y 
+
+# Subsetting missing values out 
+airquality[1:6, ] # Contains some rows with NA values 
+good <- complete.cases(airquality) # Identifies rows without NA values 
+airquality[good, ][1:6, ] # Gets only the good rows and subsets the first 6 rows 
+
+# Vectorized Operations 
+# Most operations in R are vectorized to keep the code simple 
+x <- 1:4; y <- 6:9 
+x + y # Adds each element in x with the relevant element in y 
+x > 2 # Checks if each element in x is greater than 2 
+
+# Vectorized Matrix Operations 
+x <- matrix(1:4, 2, 2); y <- matrix(rep(10, 4), 2, 2) 
+x * y # Will carring out element wise multiplication. Same applies for other operators 
+x %*% y # Does true matrix multiplication 

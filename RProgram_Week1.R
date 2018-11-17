@@ -158,3 +158,38 @@ dump(c("x", "y"), file = "data.R") # values of x and y are pushed into data.R fi
 rm(x, y) # removing x & y from R environment 
 source("data.R") # Brings back x & y to R environment 
 
+# Functions can be used to access files outside our networks (internet) 
+str(file)
+# function (description = "", open = "", blocking = TRUE, encoding = getOption("encoding"), 
+# raw = FALSE, method = getOption("url.method", "default")) 
+# Description is Name of the file 
+# "open" is code indicating "r" - read only, "w" - write only, "a" - append, "rb" - reading, "wb" - writing, "ab" - append in binary mode 
+data <- read.csv("foo.txt") # Requires foo.txt to be available i WD 
+
+# Reading lines of a text file: 
+con <- gzfile("words.gz") # The file needs to be present 
+x <- readLines(con, 10) 
+# writeLines takes a character vector and writes one line at a time to a text file. 4
+
+# readLines can be used to read a webpage. 
+con <- url("https://www.nabler.com","r") 
+x <- readLines(con) 
+head(x)
+
+# Subsetting: 
+# "[" always returns the object of the same class as original. Can be used to select more than one element (with an exception). 
+# "[[" is used to extract elements of a list or dataframe. Can only be used to return one element and the class might not be list / dataframe. 
+# "$" is used to extract elements of list or dataframe by name. Same semantics as "[[" applies. 
+x <- c("a", "b", "c", "c", "d", "a") 
+x[1]
+x[2]
+x[1:4]
+x[ x > "a"]
+u <- x > "a" 
+
+#Subsetting lists 
+x <- list(foo = 1:4, bar = 0.6) 
+x[1] # Will get a list back - same as parent object 
+x[[1]] # Just contains sequence of values 
+
+

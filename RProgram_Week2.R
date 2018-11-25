@@ -125,3 +125,9 @@ colmean(airquality)
 # Args have to be passed when executing from command line or if the list of args is large and only a few are not custom. 
 # Args are matched exact, partial and not finding them, positional. 
 # Functions follow lazy evaluations of args, which are processed only if / when needed. 
+
+# Lazy Evaluation: In a function, if there are 3 args and only 2 are used, the function will not evaluate the 3rd arg if it is not required. 
+# The function will have a problem with unpassed arg only during evaluation 
+
+# ... is used to denote the default arguments of a function usually used as part of another function while not wanting to repeat all args. 
+# Args that are given apart from ... will have to be mentioned explicitly. 

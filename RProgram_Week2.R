@@ -297,4 +297,75 @@ colmean(airquality)
 
 # ... is used to denote the default arguments of a function usually used as part of another function while not wanting to repeat all args. 
 # Args that are given apart from ... will have to be mentioned explicitly. 
->>>>>>> ab65a3549b44266a7d1b239133c3f4e1009e317a
+
+# Lexical scoping: 
+make.power <- function(n) {
+  pow <- function(x) {
+    x^n
+  }
+  pow
+}
+
+cube <- make.power(3) 
+square <- make.power(2)
+cube(3)
+square(100)
+
+ls(environment(cube))
+get("n", environment(cube)) # gets value of an element 
+
+y <- 10 
+f <- function(x) {
+  y <- 2 
+  y ^ 2 + g(x)
+}
+g <- function(x) {
+  x * y 
+}
+f(3)
+
+g <- function(x) {
+  a <- 3 
+  x + a + y 
+} 
+g(2) # Returns error as y is not defined. No scoping available. 
+y <- 3 
+g(2)
+
+# Other programs that support lexical scoping are Scheme, Perl, Python, Common Lisp 
+
+# Coding Standards 
+# Always use a text editor 
+# Indent the code 
+# Limit the width of the code 
+# Limit the length of functions 
+
+# Dates & Times in R 
+# Dates are represented by Date class 
+# Times are represented by POSIXct or the POSIXlt class 
+# Dates are stored internally as the number of days since 1970-01-01 
+# Times are stored internally as the number of seconds since 1970-01-01 
+
+x <- as.Date("1970-01-01") 
+x
+unclass(x) # Result will be 0 as the starting point for the date is the same date as given above. 
+unclass(as.Date("1970-01-02")) # Result will be 1 as this date is 1 day away fro the start date. 
+
+# Dates can be coerced from string using as.POSIXct / as.POSIXlt functions 
+x <- Sys.time()
+x
+p <- (as.POSIXlt(x))
+names(unclass(p))
+p$sec # Subset using column name 
+
+# Using POSIXlt in above example will give the format in seconds 
+
+# strptime can change the format of the dates 
+datestring <- c("January 10, 2012 10:40", "December 9, 2011 9:10") 
+x <- strptime(datestring, "%B %d, %Y %H:%M") # Letting the system know how the string date is formatted 
+x
+class(x)
+
+# We can do arithmetic and logical operators on dates 
+# Plots will recognize dates as such 
+

@@ -47,6 +47,12 @@ cacheSolve <- function(x, ...) {
   m
 }
 
+det(matrix(c(5, 23, 3, 7), nrow = 2, ncol = 2))
+aMatrix <- makeCacheMatrix(matrix(c(5, 23, 3, 7), nrow = 2, ncol = 2))
+cacheSolve(aMatrix)
+
+# SAMPLE CODE # 
+
 makeVector <- function(x = numeric()) {
   m <- NULL
   set <- function(y) {

@@ -20,28 +20,28 @@ best <- function(state, outcome) {
   if((state %in% statelist && outcome %in% outcomelist) == TRUE) {
     print("State and Outcome Found. Continue with program") 
 
-    statesubset <- subset(data, State == state) 
+    statesubset <- subset(data, State == state & Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack == 14.7) 
     
     View(statesubset)
     
     print("Created subset based on State Code") 
     
-    if(outcome == "heart attack") { # Heart Attack Mortality COlumn - 11 
-      lowest <- match(min(statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack), statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack) 
-      statesubset[lowest, 2]
+    coltotake <- if(outcome == "heart attack") { # Heart Attack Mortality COlumn - 11 
+      "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack" 
     } 
     
     else if(outcome == "heart failure") { # Heart Failure Mortality column - 17 
-      lowest <- match(min(statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure), statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure) 
-      statesubset[lowest, 2]
+      "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure" 
     } 
     
-    else if(outcome == "pneumonia") { # Pneumonia Mortality column - 23 
-      lowest <- match(min(statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia), statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia) 
-      statesubset[lowest, 2]
-    }
+    else { # Pneumonia Mortality column - 23 
+      "Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia"
+    } 
+    paste("coltotake =", coltotake) 
+    lowest <- match(min(statesubset[, coltotake]), statesubset[, coltotake]) 
+    statesubset[lowest, 2]
   } 
-}
+} 
 
 best("AL", "heart attack")
-match(min(statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure), statesubset$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+

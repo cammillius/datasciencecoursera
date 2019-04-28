@@ -178,3 +178,73 @@ sample(1:10, replace = TRUE) # Repeats values multiple times
 # Standard distributions are built in: Normal, Poisson, Binomial, Exponential, Gamma, etc 
 # The sample function can be used to draw random samples from arbitrary vectors 
 # Setting the random number generator seed via set.seed is critical for reproducibility 
+
+# Profiler 
+# Profiler helps to optimize the code 
+# Profiling is a systematic way to examine how much is spent in different parts of a program 
+# Useful in trying to optimize your code 
+# Often code runs fine once, but we need to check what happens when it is looped a 1,000 times 
+# Measure the optimization requirement rather than guessing  
+# Getting biggest impact on speeding up code depends on knowing where the code spends most of the time 
+# This cannot be done without performance analysis  or profiling 
+# Do not optimize code without finishing the goal of the code 
+
+# system.time() 
+# Takes an arbitrary R expression as input (can be wrapped in curly braces) and returns the amount 
+# of time taken to evaluate the expression 
+# Computes the time (in seconds) needed to execute an expression 
+# If there's an error, gives time until error occured 
+# Returns an object of class proc_time 
+ # User time: Time charged to the CPU(s) for this expression 
+ # Elapsed time: The "wall clock" or real world time that we see 
+# Usually the user time and elapsed time would be the same 
+# Elapsed time might be higher than user time if the CPU waits before executing tasks 
+# Elapsed time might be smaller than user time if the CPU works using multiple cores / processors 
+# such as Multi-Threaded BLAS libraries (vecLib / Accelerate, ATLAS, ACML, MKL) or Parallel processing via the parallel package 
+
+# Example where elapsed time >  user time 
+system.time(readLines("https://www.jhsph.edu"))
+
+# Example where user time > elapsed time 
+hilbert <- function(n) {
+  i <- 1:n 
+  1 / outer(i-1, i, "+")
+} 
+x <- hilbert(1000) 
+system.time(svd(x))
+# The above output didn't come out as expected 
+
+# How to check time for long codes and functions: Wrap them in curly braces 
+system.time({
+  n <- 1000 
+  r <- numeric(n) 
+  for (i  in 1:n) {
+    x <- rnorm(n) 
+    r[i] <- mean(x)
+  }
+}) 
+
+# Using system.time() allows you to test certain functions or code blocks to see if they are taking excessing amounts of time 
+# Assumes you already know where the problem is and can call system.time() on it 
+# What if you don't know where to start? 
+
+# Using Rprof() 
+# This functions starts the R Profiler. R must be compiled with Profiler support which is the usual case. 
+# The summaryRprof() function summarizes the output from the Rprof() function which is by default not readable. 
+# DO NOT use system.time() and Rprof() together. 
+# Rprof() keeps track of the function call stack at regularly sampled intervals and tabulates how much time is spent in each function 
+# Default sampling interval is 0.02 seconds 
+# NOTE: If your code runs very quickly, the profiler is not useful, in which case, it is not required 
+
+
+# lm(y ~ x) 
+sample.interval = 10000 # Don't understand this code 
+
+# summaryRprof() function tabulates the R profiler output and calculates how much time is spent in which function 
+# There are two methods for normalizing the data 
+# "by.total" divides the time spent in each function by the total run time 
+# "by.self" does the above but first subtracts out time spent in functions above in the call stack. 
+# Meaning, in a function if the top level function calls helper functions and most of the work is done by these helper functions, 
+# then, it is possible that most time is spent by these smaller functions and it would be prudent to look at the optimization 
+# within these helper functions 
+# C or Fortran code is not profiled 

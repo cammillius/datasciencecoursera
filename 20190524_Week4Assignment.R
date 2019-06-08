@@ -1,8 +1,10 @@
 library(dplyr)
 getwd()
 # setwd("D:/Study&Learning/Coursera/DataScience") 
-# setwd("C:/All-Files/Study&Learning/Coursera/DataScience") 
-outcome <- read.csv("week4assignment-outcome-of-care-measures.csv", header = TRUE, colClasses = "character") 
+ setwd("C:/All-Files/Study&Learning/Coursera/DataScience") 
+
+outcome <- read.table("week4assignment-outcome-of-care-measures.csv", header = TRUE, sep = ",", na.strings = "Not Available", stringsAsFactors = FALSE) 
+
 View(outcome)
 head(outcome)
 ncol(outcome)
@@ -14,7 +16,15 @@ colnames(outcome[11])
 state <- "state"
 best <- function(state, outcome) { 
   # Read outcome data 
-  data <- read.csv("week4assignment-outcome-of-care-measures.csv", header = TRUE, colClasses = "character") 
+  data <- read.table("week4assignment-outcome-of-care-measures.csv", header = TRUE, sep = ",", na.strings = "NA", stringsAsFactors = FALSE) 
+  data[is.na(data)] <- 0
+  data[data == "Not Available"] <- 0
+  
+  data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack <- as.numeric(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
+  data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure = as.numeric(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+  data$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia = as.numeric(data$Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia)
+  View(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)
+  
   # Check that state and outcome are valid 
   statelist <- data$State 
   outcomelist <- c("heart attack", "heart failure", "pneumonia") 
@@ -48,7 +58,20 @@ best <- function(state, outcome) {
 } 
 
 best("AL", "pneumonia")
+best("TX", "heart attack")
+best("TX", "heart failure")
+best("MD", "heart attack")
+best("MD", "pneumonia")
+best("BB", "heart attack") 
+best("NY", "hert attack")
 
+dataTX <- subset(data, data$State == "TX")
+class(dataTX$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+dataTX$heart_failure_new = as.numeric(dataTX$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure)
+summary(dataTX$heart_failure_new)
 paste("coltotake =", coltotake) 
 lowest <- match(min(statesubset[, coltotake]), statesubset[, coltotake]) 
 statesubset[lowest, 2]
+
+data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack <- data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack[!is.na(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)]
+View(data$Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack)

@@ -1,5 +1,10 @@
-install.packages("dplyr") 
-library(dplyr) 
+if(!require(dplyr)){ 
+  
+  install.packages("dplyr") 
+  
+  library(dplyr)
+} 
+
 best <- function(state, outcome) { 
   
   # Read outcome data 
@@ -30,7 +35,7 @@ best <- function(state, outcome) {
   
   # Create the states and outcomes list 
   
-  statelist <- data$State 
+  statelist <- unique(data$State) 
   outcomelist <- c("heart attack", "heart failure", "pneumonia") 
   
   # Check that state and outcome are valid 

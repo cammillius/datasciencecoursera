@@ -1,5 +1,10 @@
-install.packages("dplyr") 
-library(dplyr) 
+if(!require(dplyr)){ 
+  
+  install.packages("dplyr") 
+  
+  library(dplyr)
+} 
+
 rankhospital <- function(state, outcome, num = "best") { 
   
   # Read outcome data 
@@ -30,7 +35,7 @@ rankhospital <- function(state, outcome, num = "best") {
   
   # Create the states and outcomes list 
   
-  statelist <- data$State 
+  statelist <- unique(data$State) 
   outcomelist <- c("heart attack", "heart failure", "pneumonia") 
   
   # Check that state and outcome are valid 
@@ -47,10 +52,6 @@ rankhospital <- function(state, outcome, num = "best") {
     # Subset data based on state 
     
     statesubset <- subset(data, State == state) 
-    
-    # Arrange the hospitals to get the first hospital in alphabetical order if there is a tie 
-    
-    statesubset <- statesubset %>% arrange(statesubset$hospital.name) 
     
     # Choose the outcome column to take, subset to the required columns and remove NAs 
 

@@ -61,3 +61,63 @@ list.files("C:\\All-Files\\Study&Learning\\Coursera\\DataScience\\GettingAndClea
 data <- read.table("data-csv.csv", sep = ",", header = TRUE) 
 head(data)
 
+# Reading Excel files 
+
+library(readxl) 
+data <- read_xls("data.xls")
+
+# For xlsx file, use read_xlsx function 
+
+# Reading XML files 
+
+# Extracting XML is the basis for most web scraping 
+
+# XML contains 2 components: Markup, which gives structure and Content which is the text 
+
+# Use XML package to read XML files 
+
+library(XML) 
+
+# The XML code given cannot read from https, which requires RCurl library 
+library(RCurl)
+
+theurl <- "https://www.w3schools.com/xml/simple.xml" 
+
+fileURL <- getURL(url = theurl) 
+
+doc <- xmlTreeParse(fileURL, useInternalNodes = TRUE) 
+
+# Rootnode is the wrapper element for the entire XML document 
+
+rootNode <- xmlRoot(doc) 
+
+# xmlName function returns the name / head tag of the rootNode 
+
+xmlName(rootNode) 
+
+# names gives the all the nested items of the root node 
+
+names(rootNode) 
+
+# We can access parts of the XML document as how we would, a list 
+
+rootNode[[1]]
+
+# We can get sub parts by sub-setting the list 
+
+rootNode[[1]][[1]] 
+
+# Programattically extract parts of the XML doc 
+# The below code goes through all parts of the rootNode and xmlValue extracts the values. 
+
+xmlSApply(rootNode, xmlValue)
+
+# If you want to read specific components of the document, you need XPath. Need to learn specific syntax for this. 
+# XPath 
+
+install.packages("XPath")
+
+# /node denotes the top level node 
+# //node denotes the nodes at any level 
+# node[@attr-name] denotes node with attribute names 
+# node[@attr-name='bob'] denotes node with specific attribute name as 'bob' 
